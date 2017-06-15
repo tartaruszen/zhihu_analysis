@@ -2,7 +2,7 @@
 #              Docker Compose that starts Kong                   #
 ##################################################################
 
-# Load Balancing
+# Service Discorvery
 consul:
   image: progrium/consul:latest
   command: -server -bootstrap -ui-dir /ui
@@ -20,24 +20,24 @@ consul:
   dns:
     - 127.0.0.1
 
-nginx-lb:
-  build: nginx/
-  mem_limit: 128m
-  ports:
-    - 8000:8000
-    - 8443:8443
-    - 8001:8001
-  expose:
-    - 8000
-    - 8443
-    - 8001
-  links:
-    - consul:consul
-  restart: always
-  command: >
-      /bin/containerpilot
-      -config file:///etc/containerpilot/containerpilot.json
-      nginx -g "daemon off;"
+# nginx-lb:
+  # build: nginx/
+  # mem_limit: 128m
+  # ports:
+    # - 8000:8000
+    # - 8443:8443
+    # - 8001:8001
+  # expose:
+    # - 8000
+    # - 8443
+    # - 8001
+  # links:
+    # - consul:consul
+  # restart: always
+  # command: >
+      # /bin/containerpilot
+      # -config file:///etc/containerpilot/containerpilot.json
+      # nginx -g "daemon off;"
 
 # Kong Database
 
@@ -49,7 +49,7 @@ kong-database:
     - POSTGRES_USER=kong
     - POSTGRES_DB=kong
 
-# Kong
+# Kong API Gateway
 
 kong:
   build: kong/
@@ -58,25 +58,53 @@ kong:
     - kong-database:kong-database
     - consul
   ports:
-    - 8000
-    - 8443
-    - 8001
+    - 8000:8000
+    - 8443:8443
+    - 8001:8001
   expose:
     - 7946
     - 7946/udp
   environment:
     - KONG_DATABASE=postgres
     - KONG_PG_HOST=kong-database
-
+      
 ##################################################################
 #              Docker Compose that starts crawer                 #
 ##################################################################
 
+# Redis Message Queue
+redis-pubsub:
+  image: bitnami/redis:latest
+  environment:
+    - ALLOW_EMPTY_PASSWORD=yes
+  ports:
+    - 6379:6379
+
+#Crawer Database
+mongo-crawer:
+  image: tutum/mongodb
+  environment:
+    - AUTH=no
+  ports:
+    - 27017:27017
+    - 28017:28017
+    
+#Crawer 
+crawer:
+  build: crawer/
+  restart: always
+  links:
+    - redis-pubsub
+    - mongo-crawer
+  volumes:
+     - ./crawer:/code
+
+
 ##################################################################
-#              Docker Compose that starts text summarization     #
+#              Docker Compose that starts text                   #
 ##################################################################
 
 ##################################################################
-#              Docker Compose that starts user relation graph    #
+#              Docker Compose that starts graph                  #
 ##################################################################
   
