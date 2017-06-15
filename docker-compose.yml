@@ -3,22 +3,22 @@
 ##################################################################
 
 # Service Discorvery
-consul:
-  image: progrium/consul:latest
-  command: -server -bootstrap -ui-dir /ui
-  restart: always
-  mem_limit: 128m
-  ports:
-    - 8500:8500
-  expose:
-    - 53
-    - 8300
-    - 8301
-    - 8302
-    - 8400
-    - 8500
-  dns:
-    - 127.0.0.1
+# consul:
+  # image: progrium/consul:latest
+  # command: -server -bootstrap -ui-dir /ui
+  # restart: always
+  # mem_limit: 128m
+  # ports:
+    # - 8500:8500
+  # expose:
+    # - 53
+    # - 8300
+    # - 8301
+    # - 8302
+    # - 8400
+    # - 8500
+  # dns:
+    # - 127.0.0.1
 
 # nginx-lb:
   # build: nginx/
@@ -41,32 +41,41 @@ consul:
 
 # Kong Database
 
-kong-database:
-  image: postgres:9.4
-  ports:
-    - 5432
-  environment:
-    - POSTGRES_USER=kong
-    - POSTGRES_DB=kong
+# kong-database:
+  # image: postgres:9.4
+  # ports:
+    # - 5432
+  # environment:
+    # - POSTGRES_USER=kong
+    # - POSTGRES_DB=kong
 
 # Kong API Gateway
 
-kong:
-  build: kong/
+# kong:
+  # build: kong/
+  # restart: always
+  # links:
+    # - kong-database:kong-database
+    # - consul
+  # ports:
+    # - 8000:8000
+    # - 8443:8443
+    # - 8001:8001
+  # expose:
+    # - 7946
+    # - 7946/udp
+  # environment:
+    # - KONG_DATABASE=postgres
+    # - KONG_PG_HOST=kong-database
+ 
+# API Gateway
+gateway:
+  image: fagongzi/gateway
   restart: always
-  links:
-    - kong-database:kong-database
-    - consul
   ports:
-    - 8000:8000
-    - 8443:8443
-    - 8001:8001
-  expose:
-    - 7946
-    - 7946/udp
-  environment:
-    - KONG_DATABASE=postgres
-    - KONG_PG_HOST=kong-database
+    - 80:80
+    - 8080:8080
+    - 8081:8081
       
 ##################################################################
 #              Docker Compose that starts crawer                 #
@@ -115,12 +124,12 @@ crawer:
 ##################################################################
 
 # Redis Text Analysis DB
-redis-text:
-  image: bitnami/redis:latest
-  environment:
-    - ALLOW_EMPTY_PASSWORD=yes
-  ports:
-    - 6380:6379
+# redis-text:
+  # image: bitnami/redis:latest
+  # environment:
+    # - ALLOW_EMPTY_PASSWORD=yes
+  # ports:
+    # - 6380:6379
 
 # Text Analysis
 text:
@@ -131,7 +140,7 @@ text:
   links:
     - redis-pubsub
     - mongo-crawer
-    - redis-text
+    #- redis-text
   volumes:
      - ./text:/code
 
