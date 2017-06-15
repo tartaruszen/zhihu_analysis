@@ -14,11 +14,11 @@ if __name__ == '__main__':
 			if message['channel'] == 'graph-to-craw' and message['type'] == 'message':
 				craw = save_topic_all(message['data'])
 				if craw:
-					r.publish('craw-to-graph', 'craw success')
+					r.publish('craw-to-text', 'craw '+message['data']+' success')
 			elif message['channel'] == 'text-to-craw' and message['type'] == 'message':
 				craw = save_topic_all(message['data'])
 				if craw:
-					r.publish('craw-to-text', 'craw success')
+					r.publish('craw-to-text', 'craw '+message['data']+' success')
 			else:
 				pass
 		time.sleep(0.001)

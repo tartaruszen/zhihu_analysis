@@ -1,0 +1,4 @@
+pymongo
+redis
+flask
+jieba

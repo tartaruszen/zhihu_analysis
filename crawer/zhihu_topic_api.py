@@ -52,15 +52,22 @@ def get_data_from_zhihu_api(api,token):
             data['items'].extend(j['data'])
         return data
 
+def get_proxy():
+    #return requests.get("http://proxy-pool:5000/get/").content
+    return requests.get("http://123.207.35.36:5000/get/").content
+
+def delete_proxy(proxy):
+    requests.get("http://proxy-pool:5000/delete/?proxy={}".format(proxy))
+
 def get_topic_hot(topic_token):
     j = get_data_from_zhihu_api(zhihu_api_topics,topic_token)
     page = j['best_answers_count']/20 + 1
     question_token_list = []
     for p in xrange(page):
-        r_ = requests.get(zhihu_api_topics_top_answers.format(topic_token,p+1),headers=headers)
+        r_ = requests.get(zhihu_api_topics_top_answers.format(topic_token,p+1),headers=headers,proxies={"http": "http://{}".format(get_proxy())})
         if r_.status_code == 404:
             continue
-        soup = BeautifulSoup(r_.content)
+        soup = BeautifulSoup(r_.content,"html5lib")
         q = soup.find('div',attrs={'class':'zm-topic-list-container'}).find_all('a',attrs={'class':'question_link'})
         for i in q:
             question_token_list.append(i.attrs['href'].split('/')[-1])
@@ -75,12 +82,12 @@ def get_answer_token(answers):
 
 def save_topic_all(topic_token):
     topic_token = str(topic_token)
-    print 'topic_token:'topic_token
+    print 'topic_token:',topic_token
     if topic.find_one({'topic_token':topic_token}) == None:
         topic_j,question_token_list = get_topic_hot(topic_token)
         topic.insert_one({'_id':topic_token,'topic_token':topic_token,'data':topic_j,'question_token_list':question_token_list})
         for question_token in question_token_list:
-            print 'question_token:'question_token
+            print 'question_token:',question_token
             if question.find_one({'question_token':question_token}) == None:
                 questions = get_data_from_zhihu_api(zhihu_api_questions,question_token)
                 question.insert_one({'_id':question_token,'question_token':question_token,'questions':questions})

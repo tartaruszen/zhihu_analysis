@@ -89,6 +89,15 @@ mongo-crawer:
     - 27017:27017
     - 28017:28017
     
+#Crawer Proxy
+# proxy-pool:
+  # build: proxy_pool/
+  # restart: always
+  # ports:
+    # - 5000:5000
+  # volumes:
+     # - ./proxy_pool:/code
+     
 #Crawer 
 crawer:
   build: crawer/
@@ -96,6 +105,7 @@ crawer:
   links:
     - redis-pubsub
     - mongo-crawer
+    #- proxy-pool
   volumes:
      - ./crawer:/code
 
@@ -103,6 +113,27 @@ crawer:
 ##################################################################
 #              Docker Compose that starts text                   #
 ##################################################################
+
+# Redis Text Analysis DB
+redis-text:
+  image: bitnami/redis:latest
+  environment:
+    - ALLOW_EMPTY_PASSWORD=yes
+  ports:
+    - 6380:6379
+
+# Text Analysis
+text:
+  build: text/
+  restart: always
+  ports:
+    - 5001:5000
+  links:
+    - redis-pubsub
+    - mongo-crawer
+    - redis-text
+  volumes:
+     - ./text:/code
 
 ##################################################################
 #              Docker Compose that starts graph                  #
