@@ -1,15 +1,20 @@
 from flask import Flask
-import redis
-
-r = redis.StrictRedis(host='redis-text', port=6380, db=0)
 app = Flask(__name__)
 
-rp = redis.StrictRedis(host='redis-pubsub', port=6379, db=0)
+from text_config import get_config
+config = get_config()
+rt = config['rt']
+rp = config['rp']
+rpp = rp.pubsub()
+
+@app.route('/')
+def hello():
+	return 'hello world'
 
 @app.route('/keyword/<topic_token>')
 def show_user_profile(topic_token):
-	if r.exists('keyword'+str(topic_token)):
-		keywords = r.lrange('keyword'+str(topic_token),0,29)
+	if rt.exists('keyword'+str(topic_token)):
+		keywords = rt.lrange('keyword'+str(topic_token),0,29)
 		d = {}
 		for k in keywords:
 			d[k.split(':')[0]] = k.split(':')[1]

@@ -2,16 +2,17 @@ import time
 from text_etl import load_text
 from text_analysis import extract_keyword
 
-import redis
-r = redis.StrictRedis(host='redis-pubsub', port=6379, db=0)
-p = r.pubsub()
-p.subscribe('craw-to-text')
+from text_config import get_config
+config = get_config()
+rt = config['rt']
+rp = config['rp']
+rpp = rp.pubsub()
 
-rt = redis.StrictRedis(host='redis-text', port=6380, db=0)
+rpp.subscribe('craw-to-text')
 
 if __name__ == '__main__':
 	while True:
-		message = p.get_message()
+		message = rpp.get_message()
 		if message:
 			print message
 			if message['channel'] == 'craw-to-text' and message['type'] == 'message':

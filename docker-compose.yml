@@ -31,6 +31,10 @@ crawer:
   links:
     - redis-pubsub
     - mongo-crawer
+  # depends_on:
+    # - redis-pubsub
+    # - mongo-crawer
+  command: [ "python","craw_worker.py"]
 
 #Redis Text Analysis DB
 redis-text:
@@ -50,3 +54,8 @@ text:
     - redis-pubsub
     - mongo-crawer
     - redis-text
+  # depends_on:
+    # - redis-pubsub
+    # - mongo-crawer
+    # - redis-text
+  command: [ "python","text_web.py","python","text_worker.py"]

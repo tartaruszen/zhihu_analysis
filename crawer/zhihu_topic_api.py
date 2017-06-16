@@ -1,17 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
-from pymongo import MongoClient
 
-client = MongoClient('mongo-crawer', 27017)
-db = client.zhihu
+from text_config import get_config
+config = get_config()
+db = config['db']
+
 topic = db.topic
 question = db.question
 question_answer = db.question_answer
 answer_comment = db.answer_comment
-answer = db.answer
-comment = db.comment
-member = db.member
-
 
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
           'authorization':'Bearer Mi4wQUJES2V4VTJGd2tBUUlKaDFUMHJDeGNBQUFCaEFsVk5iUjlIV1FCTWJlYlFVemVUSUxxZFlpNTVIRGRiYTQ5U3d3|1497493211|bfcfd074d07a691bdfe92a980ff4eb770a918cd8'
