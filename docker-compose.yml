@@ -21,7 +21,7 @@ proxy-pool:
   restart: always
   ports:
     - 5000:5000
-  command: [ "python","./run/main.py"]
+  command: [ "python","./Run/main.py"]
      
 #Crawer Database
 # mongo-crawer:
