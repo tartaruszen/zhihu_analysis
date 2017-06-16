@@ -1,5 +1,5 @@
 import redis
-rt = redis.StrictRedis(host='redis-pubsub', port=6379, db=0)
+rt = redis.StrictRedis(host='redis-text', port=6380, db=0)
 
 from pymongo import MongoClient
 
