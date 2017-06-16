@@ -1,8 +1,8 @@
-FROM ubuntu-upstart
-
-RUN apt-get update
-RUN apt-get install -y --force-yes python python-dev python-setuptools software-properties-common gcc python-pip
-RUN apt-get clean all
+#FROM ubuntu-upstart
+FROM python:2.7.13
+#RUN apt-get update
+#RUN apt-get install -y --force-yes python python-dev python-setuptools software-properties-common gcc python-pip
+#RUN apt-get clean all
 
 ADD . /code
 WORKDIR /code

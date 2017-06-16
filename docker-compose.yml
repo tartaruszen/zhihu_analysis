@@ -68,7 +68,7 @@
     # - KONG_DATABASE=postgres
     # - KONG_PG_HOST=kong-database
  
-# API Gateway
+#API Gateway
 gateway:
   image: fagongzi/gateway
   restart: always
@@ -92,6 +92,7 @@ redis-pubsub:
 #Crawer Database
 mongo-crawer:
   image: tutum/mongodb
+  #command: "--smallfiles"
   environment:
     - AUTH=no
   ports:
@@ -143,6 +144,8 @@ text:
     #- redis-text
   volumes:
      - ./text:/code
+  #depends_on:
+   #    - mongodb
 
 ##################################################################
 #              Docker Compose that starts graph                  #
