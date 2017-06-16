@@ -140,7 +140,7 @@ text:
   links:
     - redis-pubsub
     - mongo-crawer
-    #- redis-text
+    - redis-text
   volumes:
      - ./text:/code
 
