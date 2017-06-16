@@ -15,6 +15,8 @@ __author__ = 'JHao'
 import sys
 from multiprocessing import Process
 
+import os
+sys.path.append(os.getcwd())
 sys.path.append('../')
 
 from Api.ProxyApi import run as ProxyApiRun
