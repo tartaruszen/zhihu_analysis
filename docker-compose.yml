@@ -14,7 +14,16 @@ redis-pubsub:
     - ALLOW_EMPTY_PASSWORD=yes
   ports:
     - 6379:6379
-
+    
+#Crawer Proxy
+proxy-pool:
+  build: proxy_pool/
+  restart: always
+  ports:
+    - 5000:5000
+  volumes:
+     - ./proxy_pool:/code
+     
 #Crawer Database
 mongo-crawer:
   image: tutum/mongodb:3.0
