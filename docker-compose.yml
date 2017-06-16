@@ -30,8 +30,6 @@ proxy-pool:
   restart: always
   ports:
     - 5000:5000
-  volumes:
-     - ./proxy_pool:/code
      
 #Crawer 
 crawer:
@@ -41,9 +39,6 @@ crawer:
     - redis-pubsub
     - mongo-crawer
     - proxy-pool
-  volumes:
-     - ./crawer:/code
-
 
 #Redis Text Analysis DB
 redis-text:
@@ -63,7 +58,3 @@ text:
     - redis-pubsub
     - mongo-crawer
     - redis-text
-  volumes:
-     - ./text:/code
-  #depends_on:
-   #    - mongodb
