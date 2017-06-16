@@ -8,12 +8,12 @@
     # - 8081:8081
 
 # Redis Message Queue
-redis-pubsub:
-  image: bitnami/redis:latest
-  environment:
-    - ALLOW_EMPTY_PASSWORD=yes
-  ports:
-    - 6379:6379
+# redis-pubsub:
+  # image: bitnami/redis:latest
+  # environment:
+    # - ALLOW_EMPTY_PASSWORD=yes
+  # ports:
+    # - 6379:6379
     
 #Crawer Proxy
 proxy-pool:
@@ -21,27 +21,26 @@ proxy-pool:
   restart: always
   ports:
     - 5000:5000
-  volumes:
-     - ./proxy_pool:/code
+  command: [ "python","/code/run/main.py"]
      
 #Crawer Database
-mongo-crawer:
-  image: tutum/mongodb:3.0
-  environment:
-    - AUTH=no
-    - JOURNALING=no 
-  ports:
-    - 27017:27017 
-    - 28017:28017 
+# mongo-crawer:
+  # image: tutum/mongodb:3.0
+  # environment:
+    # - AUTH=no
+    # - JOURNALING=no 
+  # ports:
+    # - 27017:27017 
+    # - 28017:28017 
      
 #Crawer 
-crawer:
-  build: crawer/
-  restart: always
-  links:
-    - redis-pubsub
-    - mongo-crawer
-  command: [ "python","craw_worker.py"]
+# crawer:
+  # build: crawer/
+  # restart: always
+  # links:
+    # - redis-pubsub
+    # - mongo-crawer
+  # command: [ "python","craw_worker.py"]
 
 #Redis Text Analysis DB
 # redis-text:
@@ -56,7 +55,7 @@ crawer:
   # build: text/
   # restart: always
   # ports:
-    # - 5000:5000
+    # - 5001:5000
   # links:
     # - redis-pubsub
     # - mongo-crawer
