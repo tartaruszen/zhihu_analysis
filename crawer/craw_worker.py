@@ -1,7 +1,7 @@
 from zhihu_topic_api import save_topic_all
 import time
 
-from text_config import get_config
+from craw_config import get_config
 config = get_config()
 rp = config['rp']
 rpp = rp.pubsub()

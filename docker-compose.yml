@@ -1,11 +1,11 @@
 #API Gateway
-gateway:
-  image: fagongzi/gateway
-  restart: always
-  ports:
-    - 80:80
-    - 8080:8080
-    - 8081:8081
+# gateway:
+  # image: fagongzi/gateway
+  # restart: always
+  # ports:
+    # - 80:80
+    # - 8080:8080
+    # - 8081:8081
 
 # Redis Message Queue
 redis-pubsub:

@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-from text_config import get_config
+from craw_config import get_config
 config = get_config()
 db = config['db']
 
