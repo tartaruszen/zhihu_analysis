@@ -20,9 +20,10 @@ mongo-crawer:
   image: tutum/mongodb
   environment:
     - AUTH=no
+    - JOURNALING=no 
   ports:
-    - 27017:27017
-    - 28017:28017
+    - 27017:27017 
+    - 28017:28017 
      
 #Crawer 
 crawer:
@@ -31,31 +32,24 @@ crawer:
   links:
     - redis-pubsub
     - mongo-crawer
-  # depends_on:
-    # - redis-pubsub
-    # - mongo-crawer
   command: [ "python","craw_worker.py"]
 
 #Redis Text Analysis DB
-redis-text:
-  image: bitnami/redis:latest
-  environment:
-    - ALLOW_EMPTY_PASSWORD=yes
-  ports:
-    - 6380:6379
+# redis-text:
+  # image: bitnami/redis:latest
+  # environment:
+    # - ALLOW_EMPTY_PASSWORD=yes
+  # ports:
+    # - 6380:6379
 
 # Text Analysis
-text:
-  build: text/
-  restart: always
-  ports:
-    - 5000:5000
-  links:
-    - redis-pubsub
-    - mongo-crawer
-    - redis-text
-  # depends_on:
+# text:
+  # build: text/
+  # restart: always
+  # ports:
+    # - 5000:5000
+  # links:
     # - redis-pubsub
     # - mongo-crawer
     # - redis-text
-  command: [ "python","text_web.py","python","text_worker.py"]
+  # command: [ "python","text_web.py","python","text_worker.py"]

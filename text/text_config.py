@@ -16,18 +16,18 @@ wait_for_redis(rp)
 rt = redis.StrictRedis(host='redis-text', port=6380, db=0)
 wait_for_redis(rt)
 
-def wait_for_mongo(db):
+def wait_for_mongo(client):
 	ready = True
 	while ready:
 		try:
-			db.add_user('zhihu')
+			client.database_names()
 			ready = False
 		except:
 			pass
-			
+
 client = MongoClient('mongo-crawer', 27017)
+wait_for_mongo(client)
 db = client.zhihu
-wait_for_mongo(db)
 
 def get_config():
 	return {'rt':rt,'rp':rp,'db':db}
