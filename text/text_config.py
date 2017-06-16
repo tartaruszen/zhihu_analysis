@@ -16,11 +16,11 @@ wait_for_redis(rp)
 rt = redis.StrictRedis(host='redis-text', port=6380, db=0)
 wait_for_redis(rt)
 
-def wait_for_mongo(client):
+def wait_for_mongo(c):
 	ready = True
 	while ready:
 		try:
-			client.database_names()
+			c.database_names()
 			ready = False
 		except:
 			pass

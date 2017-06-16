@@ -14,7 +14,7 @@ if __name__ == '__main__':
 	while True:
 		message = rpp.get_message()
 		if message:
-			print message
+			print 'text_worker process!'
 			if message['channel'] == 'craw-to-text' and message['type'] == 'message':
 				if message['data'].endswith('success'):
 					topic_token = message['data'].split(' ')[1]
@@ -26,4 +26,5 @@ if __name__ == '__main__':
 						rt.lpush('keyword'+topic_token,str(k)+':'+str(v))
 			else:
 				pass
+		print 'text_worker wait!'
 		time.sleep(0.001)

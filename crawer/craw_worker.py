@@ -8,10 +8,11 @@ rpp = rp.pubsub()
 rpp.subscribe('graph-to-craw', 'text-to-craw')
 
 if __name__ == '__main__':
+	print 'craw_worker start!'
 	while True:
 		message = rpp.get_message()
 		if message:
-			print message
+			print 'craw_worker process!'
 			if message['channel'] == 'graph-to-craw' and message['type'] == 'message':
 				craw = save_topic_all(message['data'])
 				if craw:
@@ -22,5 +23,6 @@ if __name__ == '__main__':
 					rp.publish('craw-to-text', 'craw '+message['data']+' success')
 			else:
 				pass
-		time.sleep(0.001)
+		print 'craw_worker wait!'
+		time.sleep(1)
 	
