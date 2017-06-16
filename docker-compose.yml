@@ -23,13 +23,6 @@ mongo-crawer:
   ports:
     - 27017:27017
     - 28017:28017
-    
-#Crawer Proxy
-proxy-pool:
-  build: proxy_pool/
-  restart: always
-  ports:
-    - 5000:5000
      
 #Crawer 
 crawer:
@@ -38,7 +31,6 @@ crawer:
   links:
     - redis-pubsub
     - mongo-crawer
-    - proxy-pool
 
 #Redis Text Analysis DB
 redis-text:
@@ -53,7 +45,7 @@ text:
   build: text/
   restart: always
   ports:
-    - 5001:5000
+    - 5000:5000
   links:
     - redis-pubsub
     - mongo-crawer
