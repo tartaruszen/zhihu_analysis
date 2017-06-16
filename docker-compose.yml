@@ -1,73 +1,3 @@
-##################################################################
-#              Docker Compose that starts Kong                   #
-##################################################################
-
-# Service Discorvery
-# consul:
-  # image: progrium/consul:latest
-  # command: -server -bootstrap -ui-dir /ui
-  # restart: always
-  # mem_limit: 128m
-  # ports:
-    # - 8500:8500
-  # expose:
-    # - 53
-    # - 8300
-    # - 8301
-    # - 8302
-    # - 8400
-    # - 8500
-  # dns:
-    # - 127.0.0.1
-
-# nginx-lb:
-  # build: nginx/
-  # mem_limit: 128m
-  # ports:
-    # - 8000:8000
-    # - 8443:8443
-    # - 8001:8001
-  # expose:
-    # - 8000
-    # - 8443
-    # - 8001
-  # links:
-    # - consul:consul
-  # restart: always
-  # command: >
-      # /bin/containerpilot
-      # -config file:///etc/containerpilot/containerpilot.json
-      # nginx -g "daemon off;"
-
-# Kong Database
-
-# kong-database:
-  # image: postgres:9.4
-  # ports:
-    # - 5432
-  # environment:
-    # - POSTGRES_USER=kong
-    # - POSTGRES_DB=kong
-
-# Kong API Gateway
-
-# kong:
-  # build: kong/
-  # restart: always
-  # links:
-    # - kong-database:kong-database
-    # - consul
-  # ports:
-    # - 8000:8000
-    # - 8443:8443
-    # - 8001:8001
-  # expose:
-    # - 7946
-    # - 7946/udp
-  # environment:
-    # - KONG_DATABASE=postgres
-    # - KONG_PG_HOST=kong-database
- 
 #API Gateway
 gateway:
   image: fagongzi/gateway
@@ -76,10 +6,6 @@ gateway:
     - 80:80
     - 8080:8080
     - 8081:8081
-      
-##################################################################
-#              Docker Compose that starts crawer                 #
-##################################################################
 
 # Redis Message Queue
 redis-pubsub:
@@ -92,7 +18,6 @@ redis-pubsub:
 #Crawer Database
 mongo-crawer:
   image: tutum/mongodb
-  #command: "--smallfiles"
   environment:
     - AUTH=no
   ports:
@@ -100,13 +25,13 @@ mongo-crawer:
     - 28017:28017
     
 #Crawer Proxy
-# proxy-pool:
-  # build: proxy_pool/
-  # restart: always
-  # ports:
-    # - 5000:5000
-  # volumes:
-     # - ./proxy_pool:/code
+proxy-pool:
+  build: proxy_pool/
+  restart: always
+  ports:
+    - 5000:5000
+  volumes:
+     - ./proxy_pool:/code
      
 #Crawer 
 crawer:
@@ -115,22 +40,18 @@ crawer:
   links:
     - redis-pubsub
     - mongo-crawer
-    #- proxy-pool
+    - proxy-pool
   volumes:
      - ./crawer:/code
 
 
-##################################################################
-#              Docker Compose that starts text                   #
-##################################################################
-
-# Redis Text Analysis DB
-# redis-text:
-  # image: bitnami/redis:latest
-  # environment:
-    # - ALLOW_EMPTY_PASSWORD=yes
-  # ports:
-    # - 6380:6379
+#Redis Text Analysis DB
+redis-text:
+  image: bitnami/redis:latest
+  environment:
+    - ALLOW_EMPTY_PASSWORD=yes
+  ports:
+    - 6380:6379
 
 # Text Analysis
 text:
@@ -141,13 +62,8 @@ text:
   links:
     - redis-pubsub
     - mongo-crawer
-    #- redis-text
+    - redis-text
   volumes:
      - ./text:/code
   #depends_on:
    #    - mongodb
-
-##################################################################
-#              Docker Compose that starts graph                  #
-##################################################################
-  
