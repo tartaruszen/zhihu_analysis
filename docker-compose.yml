@@ -22,8 +22,8 @@
   # ports:
     # - 5000:5000
   # command: [ "python","./Run/main.py"]
-ProxyPool:
-  build: ProxyPool/
+proxypool:
+  build: proxypool/
   restart: always
   ports:
     - 8000:8000

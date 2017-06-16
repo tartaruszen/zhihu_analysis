@@ -50,7 +50,7 @@ def get_data_from_zhihu_api(api,token):
         return data
 
 def get_proxy():
-    return requests.get("http://ProxyPool:8000").content[0]
+    return requests.get("http://proxypool:8000").content[0]
     #return requests.get("http://123.207.35.36:5000/get/").content
 
 # def delete_proxy(proxy):
