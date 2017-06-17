@@ -1,83 +1,138 @@
+# Load Balancing
+consul:
+  image: progrium/consul:latest
+  command: -server -bootstrap -ui-dir /ui
+  restart: always
+  mem_limit: 128m
+  ports:
+    - 8500:8500
+  expose:
+    - 53
+    - 8300
+    - 8301
+    - 8302
+    - 8400
+    - 8500
+  dns:
+    - 127.0.0.1
+
+nginx-lb:
+  build: nginx/
+  mem_limit: 128m
+  ports:
+    - 8000:8000
+    - 8443:8443
+    - 8001:8001
+  expose:
+    - 8000
+    - 8443
+    - 8001
+  links:
+    - consul:consul
+  restart: always
+  command: >
+      /bin/containerpilot
+      -config file:///etc/containerpilot/containerpilot.json
+      nginx -g "daemon off;"
+
+      
 # Kong Database
 
+kong-database:
+  image: postgres:9.4
+  ports:
+    - 5432
+  environment:
+    - POSTGRES_USER=kong
+    - POSTGRES_DB=kong
+    
 # kong-database:
-  # image: postgres:9.4
-  # ports:
-    # - 5432
-  # environment:
-    # - POSTGRES_USER=kong
-    # - POSTGRES_DB=kong
-
-# # Kong
-
-# kong:
-  # build: kong/
+  # image: cassandra:2.2
   # restart: always
-  # links:
-    # - kong-database:kong-database
   # ports:
-    # - 8000
-    # - 8443
-    # - 8001
-  # expose:
-    # - 7946
-    # - 7946/udp
-  # environment:
-    # - KONG_DATABASE=postgres
-    # - KONG_PG_HOST=kong-database
+    # - 9042:9042
+
+# Kong
+
+kong:
+  build: kong/
+  restart: always
+  links:
+    - kong-database:kong-database
+    - consul
+  ports:
+    - 8000
+    - 8443
+    - 8001
+  expose:
+    - 7946
+    - 7946/udp
+  environment:
+    - KONG_DATABASE=postgres
+    - KONG_PG_HOST=kong-database
+
+# Kong-dashboard
+
+kong-dashboard:
+  image: pgbi/kong-dashboard:v2
+  restart: always
+  ports:
+    - 8080:8080 
+  links:
+    - kong
 
 # Redis Message Queue
-redis-pubsub:
-  image: bitnami/redis:latest
-  environment:
-    - ALLOW_EMPTY_PASSWORD=yes
-  ports:
-    - 6379:6379
+# redis-pubsub:
+  # image: bitnami/redis:latest
+  # environment:
+    # - ALLOW_EMPTY_PASSWORD=yes
+  # ports:
+    # - 6379:6379
      
-#Crawer Database
-mongo-crawer:
-  image: tutum/mongodb:3.0
-  environment:
-    - AUTH=no
-    - JOURNALING=no 
-  ports:
-    - 27017:27017 
-    - 28017:28017 
+# #Crawer Database
+# mongo-crawer:
+  # image: tutum/mongodb:3.0
+  # environment:
+    # - AUTH=no
+    # - JOURNALING=no 
+  # ports:
+    # - 27017:27017 
+    # - 28017:28017 
      
-#Crawer 
-crawer:
-  image: lixiepeng/python_env:latest
-  #build: crawer/
-  restart: always
-  links:
-    - redis-pubsub
-    - mongo-crawer
-  volumes:
-    - ./crawer:/code
-  command: [ "python","craw_worker.py"]
+# #Crawer 
+# crawer:
+  # image: lixiepeng/python_env:latest
+  # #build: crawer/
+  # restart: always
+  # links:
+    # - redis-pubsub
+    # - mongo-crawer
+  # volumes:
+    # - ./crawer:/code
+  # command: [ "python","craw_worker.py"]
 
-#Redis Text Analysis DB
-redis-text:
-  image: bitnami/redis:latest
-  environment:
-    - ALLOW_EMPTY_PASSWORD=yes
-  ports:
-    - 6380:6379
+# #Redis Text Analysis DB
+# redis-text:
+  # image: bitnami/redis:latest
+  # environment:
+    # - ALLOW_EMPTY_PASSWORD=yes
+  # ports:
+    # - 6380:6379
 
-# Text Analysis
-text:
-  image: lixiepeng/python_env:latest
-  #build: text/
-  restart: always
-  ports:
-    - 5001:5000
-  links:
-    - redis-pubsub
-    - mongo-crawer
-    - redis-text
-  volumes:
-    - ./text:/code
-  command: python text_manager.py
+# # Text Analysis
+# text:
+  # image: lixiepeng/python_env:latest
+  # #build: text/
+  # restart: always
+  # ports:
+    # - 5001:5000
+  # links:
+    # - redis-pubsub
+    # - mongo-crawer
+    # - redis-text
+  # volumes:
+    # - ./text:/code
+  # command: python text_manager.py
   
 # cpu_shares: 73
 # cpu_quota: 50000
