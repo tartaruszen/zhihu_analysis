@@ -27,7 +27,7 @@ mongo-crawer:
      
 #Crawer 
 crawer:
-  image:lixiepeng/python_env:latest
+  image: lixiepeng/python_env:latest
   #build: crawer/
   restart: always
   links:
@@ -47,7 +47,7 @@ redis-text:
 
 # Text Analysis
 text:
-  image:lixiepeng/python_env:latest
+  image: lixiepeng/python_env:latest
   #build: text/
   restart: always
   ports:
@@ -58,4 +58,4 @@ text:
     - redis-text
   volumes:
     - ./text:/code
-  command: [ "python","text_web.py","python","text_worker.py"]
+  command: [ "python","text_start.py"]
