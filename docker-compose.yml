@@ -27,11 +27,14 @@ mongo-crawer:
      
 #Crawer 
 crawer:
-  build: crawer/
+  image:lixiepeng/python_env:latest
+  #build: crawer/
   restart: always
   links:
     - redis-pubsub
     - mongo-crawer
+  volumes:
+    - ./crawer:/code
   command: [ "python","craw_worker.py"]
 
 #Redis Text Analysis DB
@@ -44,7 +47,8 @@ redis-text:
 
 # Text Analysis
 text:
-  build: text/
+  image:lixiepeng/python_env:latest
+  #build: text/
   restart: always
   ports:
     - 5001:5000
@@ -52,4 +56,6 @@ text:
     - redis-pubsub
     - mongo-crawer
     - redis-text
+  volumes:
+    - ./text:/code
   command: [ "python","text_web.py","python","text_worker.py"]
