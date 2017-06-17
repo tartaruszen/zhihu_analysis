@@ -58,4 +58,27 @@ text:
     - redis-text
   volumes:
     - ./text:/code
-  command: [ "python","text_start.py"]
+  command: [ "python text_worker.py", "&&", "python text_web.py" ]
+  
+# cpu_shares: 73
+# cpu_quota: 50000
+# cpuset: 0,1
+
+# user: postgresql
+# working_dir: /code
+
+# domainname: foo.com
+# hostname: foo
+# ipc: host
+# mac_address: 02:42:ac:11:65:43
+
+# mem_limit: 1000000000
+# memswap_limit: 2000000000
+# privileged: true
+
+# restart: always
+
+# read_only: true
+# shm_size: 64M
+# stdin_open: true
+# tty: true
