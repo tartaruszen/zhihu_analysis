@@ -1,4 +1,5 @@
 from flask import Flask
+import json
 app = Flask(__name__)
 
 from text_config import get_config
@@ -9,7 +10,8 @@ rpp = rp.pubsub()
 
 @app.route('/')
 def hello():
-	return 'hello world'
+	message = {'/keyword/topic_token':'return top 30 keywords in the topic'}
+	return json.dumps(message)
 
 @app.route('/keyword/<topic_token>')
 def show_user_profile(topic_token):
@@ -18,7 +20,8 @@ def show_user_profile(topic_token):
 		d = {}
 		for k in keywords:
 			d[k.split(':')[0]] = k.split(':')[1]
-		return d
+		print d
+		return json.dumps(d)
 		# html = '<ol>'
 		# for k in keywords:
 			# html = html+'<li>'+k+'</li>'

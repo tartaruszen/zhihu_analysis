@@ -20,11 +20,12 @@ if __name__ == '__main__':
 					topic_token = message['data'].split(' ')[1]
 					if not rt.exists('corpora'+topic_token):
 						load_text(topic_token)
-					text = tr.get('corpora'+topic_token)
+					text = rt.get('corpora'+topic_token)
 					keywords = extract_keyword(text)
 					for k,v in keywords.items():
-						rt.lpush('keyword'+topic_token,str(k)+':'+str(v))
+						#print type(k),type(v)
+						rt.lpush('keyword'+topic_token,k.encode('utf-8')+':'+unicode(v).encode('utf-8'))
 			else:
 				pass
 		print 'text_worker wait!'
-		time.sleep(0.001)
+		time.sleep(1)

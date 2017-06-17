@@ -35,21 +35,21 @@ crawer:
   command: [ "python","craw_worker.py"]
 
 #Redis Text Analysis DB
-# redis-text:
-  # image: bitnami/redis:latest
-  # environment:
-    # - ALLOW_EMPTY_PASSWORD=yes
-  # ports:
-    # - 6380:6379
+redis-text:
+  image: bitnami/redis:latest
+  environment:
+    - ALLOW_EMPTY_PASSWORD=yes
+  ports:
+    - 6380:6379
 
 # Text Analysis
-# text:
-  # build: text/
-  # restart: always
-  # ports:
-    # - 5001:5000
-  # links:
-    # - redis-pubsub
-    # - mongo-crawer
-    # - redis-text
-  # command: [ "python","text_web.py","python","text_worker.py"]
+text:
+  build: text/
+  restart: always
+  ports:
+    - 5001:5000
+  links:
+    - redis-pubsub
+    - mongo-crawer
+    - redis-text
+  command: [ "python","text_web.py","python","text_worker.py"]

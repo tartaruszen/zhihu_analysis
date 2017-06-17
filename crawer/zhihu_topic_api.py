@@ -32,7 +32,8 @@ zhihu_api_members = zhihu_api+'members/{}'+'?'+members_include
 
 def get_data_from_zhihu_api(api,token):
     data = {'totals':0,'items':[]}
-    res = requests.get(api.format(token),headers=headers)
+    proxy = proxy_list[random.randint(0,len(proxy_list)-1)]
+    res = requests.get(api.format(token),headers=headers,proxies={"http": "http://{}".format(proxy)})
     if res.status_code == 404:
         return {'error':'http_404'}
     try:
