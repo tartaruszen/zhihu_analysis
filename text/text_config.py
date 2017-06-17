@@ -1,4 +1,5 @@
 import os
+import time
 import redis
 from pymongo import MongoClient
 
@@ -9,6 +10,7 @@ def wait_for_redis(r):
 			r.set('ready','go')
 			ready = False
 		except:
+			time.sleep(1)
 			print 'wait_for_redis!'
 
 def wait_for_mongo(c):
@@ -18,6 +20,7 @@ def wait_for_mongo(c):
 			c.database_names()
 			ready = False
 		except:
+			time.sleep(1)
 			print 'wait_for_mongo!'
 
 if os.name == 'nt':
