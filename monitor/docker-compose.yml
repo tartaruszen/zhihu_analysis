@@ -8,9 +8,6 @@ networks:
     driver: bridge
   back-tier:
     driver: bridge
-  docker_back-tier:
-    external:
-      name: docker_back-tier
 
 services:
   prometheus:
@@ -31,9 +28,7 @@ services:
       - alertmanager:alertmanager
     depends_on:
       - cadvisor
-    networks:
-      - back-tier
-      - docker_back-tier
+    network_mode: bridge
 
   alertmanager:
     image: prom/alertmanager
@@ -41,8 +36,7 @@ services:
       - 9093:9093
     volumes:
       - ./alertmanager/:/etc/alertmanager/
-    networks:
-      - back-tier
+    network_mode: bridge
     command:
       - '-config.file=/etc/alertmanager/config.yml'
       - '-storage.path=/alertmanager'
@@ -50,15 +44,14 @@ services:
   cadvisor:
     image: google/cadvisor
     volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
+      - c:\:/rootfs:ro
+      - /var/run:/var/run
+      - /sys:/sys
+      - /var/lib/docker/:/var/lib/docker
     expose:
       - 8080
-    networks:
-      - back-tier
-
+    network_mode: bridge
+    
   grafana:
     image: grafana/grafana
     depends_on:
@@ -70,6 +63,4 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
-    networks:
-      - back-tier
-      - front-tier
+    network_mode: bridge

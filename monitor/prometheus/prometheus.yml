@@ -28,4 +28,4 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-         - targets: ['redis-pubsub:6379','mongo-crawer:27017','mongo-crawer:28017','redis-text:6379','text:5000']
+         - targets: ['localhost:9090','cadvisor:8080','redis-pubsub:6379','mongo-crawer:27017','mongo-crawer:28017','redis-text:6379','text:5000']
