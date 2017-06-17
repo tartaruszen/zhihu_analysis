@@ -1,4 +1,0 @@
-requests
-gevent
-lxml
-beautifulsoup4
