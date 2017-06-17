@@ -58,7 +58,7 @@ text:
     - redis-text
   volumes:
     - ./text:/code
-  command: [ "python text_worker.py", "&&", "python text_web.py" ]
+  command: python text_manager.py
   
 # cpu_shares: 73
 # cpu_quota: 50000

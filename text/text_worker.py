@@ -1,3 +1,4 @@
+import os
 import time
 from text_etl import load_text
 from text_analysis import extract_keyword
