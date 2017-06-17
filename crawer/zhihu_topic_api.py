@@ -32,8 +32,8 @@ zhihu_api_members = zhihu_api+'members/{}'+'?'+members_include
 
 def get_data_from_zhihu_api(api,token):
     data = {'totals':0,'items':[]}
-    proxy = proxy_list[random.randint(0,len(proxy_list)-1)]
-    res = requests.get(api.format(token),headers=headers,proxies={"http": "http://{}".format(proxy)})
+    #proxy = proxy_list[random.randint(0,len(proxy_list)-1)]
+    res = requests.get(api.format(token),headers=headers)#,proxies={"http": "http://{}".format(proxy)})
     if res.status_code == 404:
         return {'error':'http_404'}
     try:
@@ -63,6 +63,7 @@ def get_data_from_zhihu_api(api,token):
 
 def get_topic_hot(topic_token):
     j = get_data_from_zhihu_api(zhihu_api_topics,topic_token)
+    #print j
     page = j['best_answers_count']/20 + 1
     question_token_list = []
     for p in xrange(page):
@@ -70,7 +71,7 @@ def get_topic_hot(topic_token):
         r_ = requests.get(zhihu_api_topics_top_answers.format(topic_token,p+1),headers=headers,proxies={"http": "http://{}".format(proxy)})
         if r_.status_code == 404:
             continue
-        soup = BeautifulSoup(r_.content,"html5lib")
+        soup = BeautifulSoup(r_.content)#,"html5lib")
         q = soup.find('div',attrs={'class':'zm-topic-list-container'}).find_all('a',attrs={'class':'question_link'})
         for i in q:
             question_token_list.append(i.attrs['href'].split('/')[-1])
