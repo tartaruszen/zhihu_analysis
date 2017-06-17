@@ -32,7 +32,6 @@ crawer:
   links:
     - redis-pubsub
     - mongo-crawer
-    - proxypool
   command: [ "python","craw_worker.py"]
 
 #Redis Text Analysis DB
