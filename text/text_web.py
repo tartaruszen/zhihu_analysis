@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,jsonify
 import json
 import os
 app = Flask(__name__)
@@ -11,8 +11,9 @@ rpp = rp.pubsub()
 
 @app.route('/')
 def hello():
-	message = {'/keyword/topic_token':'return top 30 keywords in the topic'}
-	return json.dumps(message)
+	return jsonify({'/keyword/topic_token':'return top 30 keywords in the topic'})
+	# message = {'/keyword/topic_token':'return top 30 keywords in the topic'}
+	# return json.dumps(message)
 
 @app.route('/keyword/<topic_token>')
 def show_user_profile(topic_token):
@@ -21,8 +22,10 @@ def show_user_profile(topic_token):
 		d = {}
 		for k in keywords:
 			d[k.split(':')[0]] = k.split(':')[1]
-		print d
-		return json.dumps(d)
+		#print d
+		#ds = dict(sorted(d.iteritems(),key=lambda item:item[1],reverse=True))
+		return jsonify(d)
+		# return json.dumps(d)
 		# html = '<ol>'
 		# for k in keywords:
 			# html = html+'<li>'+k+'</li>'
