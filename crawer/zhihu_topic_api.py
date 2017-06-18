@@ -1,17 +1,18 @@
+import random
 import requests
 from bs4 import BeautifulSoup
-from pymongo import MongoClient
 
-client = MongoClient('mongo-crawer', 27017)
-db = client.zhihu
+from craw_config import get_config
+config = get_config()
+db = config['db']
+
 topic = db.topic
 question = db.question
 question_answer = db.question_answer
 answer_comment = db.answer_comment
-answer = db.answer
-comment = db.comment
-member = db.member
 
+proxy_list = requests.get('http://7xrnwq.com1.z0.glb.clouddn.com/proxy_list.txt?v=3000').content.split('\n')
+proxy_list.pop()
 
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
           'authorization':'Bearer Mi4wQUJES2V4VTJGd2tBUUlKaDFUMHJDeGNBQUFCaEFsVk5iUjlIV1FCTWJlYlFVemVUSUxxZFlpNTVIRGRiYTQ5U3d3|1497493211|bfcfd074d07a691bdfe92a980ff4eb770a918cd8'
@@ -31,7 +32,8 @@ zhihu_api_members = zhihu_api+'members/{}'+'?'+members_include
 
 def get_data_from_zhihu_api(api,token):
     data = {'totals':0,'items':[]}
-    res = requests.get(api.format(token),headers=headers)
+    #proxy = proxy_list[random.randint(0,len(proxy_list)-1)]
+    res = requests.get(api.format(token),headers=headers)#,proxies={"http": "http://{}".format(proxy)})
     if res.status_code == 404:
         return {'error':'http_404'}
     try:
@@ -52,22 +54,24 @@ def get_data_from_zhihu_api(api,token):
             data['items'].extend(j['data'])
         return data
 
-def get_proxy():
-    #return requests.get("http://proxy-pool:5000/get/").content
-    return requests.get("http://123.207.35.36:5000/get/").content
+# def get_proxy():
+    # return requests.get("http://proxypool:8000").json()[0]
+    #return requests.get("http://123.207.35.36:5000/get/").content
 
-def delete_proxy(proxy):
-    requests.get("http://proxy-pool:5000/delete/?proxy={}".format(proxy))
+# def delete_proxy(proxy):
+    # requests.get("http://proxy-pool:5000/delete/?proxy={}".format(proxy))
 
 def get_topic_hot(topic_token):
     j = get_data_from_zhihu_api(zhihu_api_topics,topic_token)
+    #print j
     page = j['best_answers_count']/20 + 1
     question_token_list = []
     for p in xrange(page):
-        r_ = requests.get(zhihu_api_topics_top_answers.format(topic_token,p+1),headers=headers,proxies={"http": "http://{}".format(get_proxy())})
+        proxy = proxy_list[random.randint(0,len(proxy_list)-1)]
+        r_ = requests.get(zhihu_api_topics_top_answers.format(topic_token,p+1),headers=headers,proxies={"http": "http://{}".format(proxy)})
         if r_.status_code == 404:
             continue
-        soup = BeautifulSoup(r_.content,"html5lib")
+        soup = BeautifulSoup(r_.content)#,"html5lib")
         q = soup.find('div',attrs={'class':'zm-topic-list-container'}).find_all('a',attrs={'class':'question_link'})
         for i in q:
             question_token_list.append(i.attrs['href'].split('/')[-1])

@@ -25,13 +25,16 @@ def wait_for_mongo(c):
 
 if os.name == 'nt':
 	rp = redis.StrictRedis(host='localhost', port=6379, db=0)
+	rt = redis.StrictRedis(host='localhost', port=6380, db=0)
 	client = MongoClient('localhost', 27017)
 else:
 	rp = redis.StrictRedis(host='redis-pubsub', port=6379, db=0)
+	rt = redis.StrictRedis(host='redis-text', port=6379, db=0)
 	client = MongoClient('mongo-crawer', 27017)
 wait_for_redis(rp)
+wait_for_redis(rt)
 wait_for_mongo(client)
 db = client.zhihu
 
 def get_config():
-	return {'rp':rp,'db':db}
+	return {'rt':rt,'rp':rp,'db':db}
