@@ -15,27 +15,6 @@ consul:
     - 8500
   dns:
     - 127.0.0.1
-
-# nginx-lb:
-  # image: lixiepeng/kong-nginx:permission
-  # #build: nginx/
-  # mem_limit: 128m
-  # ports:
-    # - 8000:8000
-    # - 8443:8443
-    # - 8001:8001
-  # expose:
-    # - 8000
-    # - 8443
-    # - 8001
-  # links:
-    # - consul:consul
-  # restart: always
-  # command: >
-      # /bin/containerpilot
-      # -config file:///etc/containerpilot/containerpilot.json
-      # nginx -g "daemon off;"
-
       
 # Kong Database
 
@@ -46,18 +25,11 @@ kong-database:
   environment:
     - POSTGRES_USER=kong
     - POSTGRES_DB=kong
-    
-# kong-database:
-  # image: cassandra:2.2
-  # restart: always
-  # ports:
-    # - 9042:9042
 
 # Kong
 
 kong:
   image: lixiepeng/kong-docker:latest
-  #build: kong/
   restart: always
   links:
     - kong-database:kong-database
@@ -86,6 +58,7 @@ kong-dashboard:
     - 8081:8080 
 
 #Redis Message Queue
+
 redis-pubsub:
   image: bitnami/redis:latest
   environment:
@@ -94,6 +67,7 @@ redis-pubsub:
     - 6379:6379
      
 #Crawer Database
+
 mongo-crawer:
   image: tutum/mongodb:3.0
   environment:
@@ -104,9 +78,9 @@ mongo-crawer:
     - 28017:28017 
      
 #Crawer 
+
 crawer:
   image: lixiepeng/python_env:latest
-  #build: crawer/
   restart: always
   links:
     - redis-pubsub
@@ -116,6 +90,7 @@ crawer:
   command: [ "python","craw_worker.py"]
 
 #Redis Text Analysis DB
+
 redis-text:
   image: bitnami/redis:latest
   environment:
@@ -124,9 +99,9 @@ redis-text:
     - 6380:6379
 
 # Text Analysis
+
 text:
   image: lixiepeng/python_env:latest
-  #build: text/
   restart: always
   ports:
     - 5001:5000
@@ -137,26 +112,3 @@ text:
   volumes:
     - ./text:/code
   command: python text_manager.py
-  
-# cpu_shares: 73
-# cpu_quota: 50000
-# cpuset: 0,1
-
-# user: postgresql
-# working_dir: /code
-
-# domainname: foo.com
-# hostname: foo
-# ipc: host
-# mac_address: 02:42:ac:11:65:43
-
-# mem_limit: 1000000000
-# memswap_limit: 2000000000
-# privileged: true
-
-# restart: always
-
-# read_only: true
-# shm_size: 64M
-# stdin_open: true
-# tty: true
