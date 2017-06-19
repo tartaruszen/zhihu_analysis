@@ -9,6 +9,8 @@ rt = config['rt']
 rp = config['rp']
 rpp = rp.pubsub()
 
+from text_api_init import init_api
+
 @app.route('/')
 def hello():
 	return jsonify({'/keyword/topic_token':'return top 30 keywords in the topic'})
@@ -36,4 +38,5 @@ def show_user_profile(topic_token):
 	return 'topic %s' % topic_token
 
 if __name__ == '__main__':
+	init_api()
 	app.run(host="0.0.0.0", debug=True)

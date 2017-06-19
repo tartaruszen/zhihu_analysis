@@ -34,10 +34,7 @@ kong:
   links:
     - kong-database:kong-database
     - consul
-  ports:
-    - 8000
-    - 8443
-    - 8001
+    - text
   ports:
     - 8000:8000
     - 8443:8443
@@ -64,8 +61,7 @@ redis-pubsub:
   environment:
     - ALLOW_EMPTY_PASSWORD=yes
   ports:
-    - 6379:6379
-     
+    - 6379:6379 
 #Crawer Database
 
 mongo-crawer:
