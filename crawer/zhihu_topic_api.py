@@ -15,7 +15,7 @@ proxy_list = requests.get('http://7xrnwq.com1.z0.glb.clouddn.com/proxy_list.txt?
 proxy_list.pop()
 
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-          'authorization':'Bearer Mi4wQUJES2V4VTJGd2tBUUlKaDFUMHJDeGNBQUFCaEFsVk5iUjlIV1FCTWJlYlFVemVUSUxxZFlpNTVIRGRiYTQ5U3d3|1497493211|bfcfd074d07a691bdfe92a980ff4eb770a918cd8'
+          'authorization':'Bearer Mi4wQUJES2V4VTJGd2tBUUlKaDFUMHJDeGNBQUFCaEFsVk5uM2h2V1FBRVYtdnNwSHFnR0hOMndFM1pwamZkdFU3ck1B|1497885599|7ab2327a40804121ba399a6d2e751fb3e5866f99'
           }
 zhihu_api = 'https://www.zhihu.com/api/v4/'
 zhihu_api_topics = zhihu_api+'/topics/{}?include=introduction%2Cquestions_count%2Cbest_answers_count%2Cfollowers_count%2Cis_following'

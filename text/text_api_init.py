@@ -38,25 +38,32 @@ def init_api():
 		except:
 			print 'wait for kong!'
 			time.sleep(3)
+	print 'kong admin start!'
 	# add api api-text
 	url = 'http://{}:8001/apis/'.format(host_ip)
 	data = {
 		'name':'api-text',\
+		'hosts':'text',\
 		'upstream_url':'http://text:5000'
 	}
 	r = requests.post(url,data=data)
-	# add key-auth to keyword
+	print r.json()
+	print 'add api api-text!'
+	# add key-auth to api-text
 	url = 'http://{}:8001/apis/api-text/plugins/'.format(host_ip)
 	data = {'name':'key-auth'}
 	r = requests.post(url,data=data)
+	print 'add key-auth to api-text!'
 	# add consumers
 	url = 'http://{}:8001/consumers/'.format(host_ip)
 	data = {'username':'comsumer-text'}
 	r = requests.post(url,data=data)
+	print 'add consumer comsumer-text!'
 	# set comsumer-text key
 	url = 'http://{}:8001/consumers/comsumer-text/key-auth'.format(host_ip)
 	data = {'key':'key-text'}
 	r = requests.post(url,data=data)
+	print 'set comsumer-text key!'
 	print 'api init sucess!'
 
 if __name__ == '__main__':
