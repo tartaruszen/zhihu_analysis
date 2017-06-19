@@ -1,14 +1,14 @@
 # zhihu_analysis
 zhihu_analysis api services
-1. kong services:api-gateway load-balance logs authentication
+1. kong services:api-gateway load-balance logs authentication  【吴汇哲】
 
-2. text services: text analysis
+2. text services: text analysis  【胡源达】
 
-3. graph services: graph analysis
+3. graph services: graph analysis 【todo】
 
-4. craw services: craw zhihu
+4. craw services: craw zhihu  【黎谢鹏】
 
-5. monitor services
+5. monitor services   【王通杰】
 
 # program architecture
 ![program architecture](https://github.com/phiedulxp/zhihu_analysis/blob/master/pic/zhihu.png)
