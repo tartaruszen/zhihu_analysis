@@ -13,13 +13,21 @@ zhihu_analysis api services
 # program architecture
 ![program architecture](https://github.com/phiedulxp/zhihu_analysis/blob/master/pic/zhihu.png)
 
-#useage
+# useage
 
 1. ./docker-compose up for services
 
 2. ./monitor docker-compose up for monitor services
 
-api requests demo:
+see [/monitor/README.md](https://github.com/phiedulxp/zhihu_analysis/blob/master/monitor/README.md) for detail
+
+then you will see kong-dashboard on http://localhost:8081 at http://you-host-ip:8001
+
+![api](https://github.com/phiedulxp/zhihu_analysis/blob/master/pic/api.png)
+![comsumer](https://github.com/phiedulxp/zhihu_analysis/blob/master/pic/comsumer.png)
+![plugin](https://github.com/phiedulxp/zhihu_analysis/blob/master/pic/plugin.png)
+
+## api requests demo:
 
 ```
 ## from Host
@@ -27,7 +35,7 @@ r = requests.get('http://localhost:5001')
 r.json()
 {u'/keyword/topic_token': u'return top 30 keywords in the topic'}
 
-##from api-gateway
+## from api-gateway
 r = requests.get('http://localhost:8000',headers={'Host':'text','apikey':'key-text'})
 r.json()
 {u'/keyword/topic_token': u'return top 30 keywords in the topic'}
