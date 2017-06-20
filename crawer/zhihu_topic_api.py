@@ -1,5 +1,6 @@
 import random
 import requests
+requests.adapters.DEFAULT_RETRIES = 5
 from bs4 import BeautifulSoup
 
 from craw_config import get_config
@@ -12,6 +13,7 @@ question_answer = db.question_answer
 answer_comment = db.answer_comment
 
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+          'Connection': 'close',
           'authorization':'Bearer Mi4wQUJES2V4VTJGd2tBUUlKaDFUMHJDeGNBQUFCaEFsVk5uM2h2V1FBRVYtdnNwSHFnR0hOMndFM1pwamZkdFU3ck1B|1497885599|7ab2327a40804121ba399a6d2e751fb3e5866f99'
           }
 zhihu_api = 'https://www.zhihu.com/api/v4/'
