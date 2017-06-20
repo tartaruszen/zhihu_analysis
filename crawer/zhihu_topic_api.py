@@ -11,9 +11,6 @@ question = db.question
 question_answer = db.question_answer
 answer_comment = db.answer_comment
 
-proxy_list = requests.get('http://7xrnwq.com1.z0.glb.clouddn.com/proxy_list.txt?v=3000').content.split('\n')
-proxy_list.pop()
-
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
           'authorization':'Bearer Mi4wQUJES2V4VTJGd2tBUUlKaDFUMHJDeGNBQUFCaEFsVk5uM2h2V1FBRVYtdnNwSHFnR0hOMndFM1pwamZkdFU3ck1B|1497885599|7ab2327a40804121ba399a6d2e751fb3e5866f99'
           }
@@ -54,8 +51,8 @@ def get_data_from_zhihu_api(api,token):
             data['items'].extend(j['data'])
         return data
 
-# def get_proxy():
-    # return requests.get("http://proxypool:8000").json()[0]
+def get_proxy():
+    return requests.get("http://localhost:8796").json()[0]
     #return requests.get("http://123.207.35.36:5000/get/").content
 
 # def delete_proxy(proxy):
@@ -67,8 +64,7 @@ def get_topic_hot(topic_token):
     page = j['best_answers_count']/20 + 1
     question_token_list = []
     for p in xrange(page):
-        proxy = proxy_list[random.randint(0,len(proxy_list)-1)]
-        r_ = requests.get(zhihu_api_topics_top_answers.format(topic_token,p+1),headers=headers,proxies={"http": "http://{}".format(proxy)})
+        r_ = requests.get(zhihu_api_topics_top_answers.format(topic_token,p+1),headers=headers,proxies={"http": "http://{}".format(get_proxy())})
         if r_.status_code == 404:
             continue
         soup = BeautifulSoup(r_.content)#,"html5lib")
