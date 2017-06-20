@@ -10,6 +10,11 @@ zhihu_analysis api services
 
 5. monitor services   【王通杰】
 
+# online demo [校园局域网]
+
+[Kong-dashboard](http://219.228.60.97:8081/)  set http://219.228.60.97:8001/
+
+
 # program architecture
 ![program architecture](https://github.com/phiedulxp/zhihu_analysis/blob/master/pic/zhihu.png)
 
