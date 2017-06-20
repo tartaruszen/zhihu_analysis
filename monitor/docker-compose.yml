@@ -44,7 +44,9 @@ services:
   cadvisor:
     image: google/cadvisor
     volumes:
-      - c:\:/rootfs:ro
+      # linux - /:/rootfs:ro
+      # whidows - c:\:/rootfs:ro
+      - /:/rootfs:ro
       - /var/run:/var/run
       - /sys:/sys
       - /var/lib/docker/:/var/lib/docker
