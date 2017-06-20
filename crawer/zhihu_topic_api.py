@@ -15,7 +15,7 @@ headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
           'authorization':'Bearer Mi4wQUJES2V4VTJGd2tBUUlKaDFUMHJDeGNBQUFCaEFsVk5uM2h2V1FBRVYtdnNwSHFnR0hOMndFM1pwamZkdFU3ck1B|1497885599|7ab2327a40804121ba399a6d2e751fb3e5866f99'
           }
 zhihu_api = 'https://www.zhihu.com/api/v4/'
-zhihu_api_topics = zhihu_api+'/topics/{}?include=introduction%2Cquestions_count%2Cbest_answers_count%2Cfollowers_count%2Cis_following'
+zhihu_api_topics = zhihu_api+'topics/{}?include=introduction%2Cquestions_count%2Cbest_answers_count%2Cfollowers_count%2Cis_following'
 zhihu_api_topics_top_answers = 'https://www.zhihu.com/topic/{}/top-answers?page={}'
 zhihu_api_questions = zhihu_api+'questions/{}'
 zhihu_api_answers = zhihu_api+'answers/{}'
@@ -29,8 +29,7 @@ zhihu_api_members = zhihu_api+'members/{}'+'?'+members_include
 
 def get_data_from_zhihu_api(api,token):
     data = {'totals':0,'items':[]}
-    #proxy = proxy_list[random.randint(0,len(proxy_list)-1)]
-    res = requests.get(api.format(token),headers=headers)#,proxies={"http": "http://{}".format(proxy)})
+    res = requests.get(api.format(token),headers=headers)
     if res.status_code == 404:
         return {'error':'http_404'}
     try:
